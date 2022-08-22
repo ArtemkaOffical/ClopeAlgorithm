@@ -213,22 +213,26 @@ namespace testclope
 
         public void NormalizeData()
         {
-			StreamWriter sw = new StreamWriter(File.Create(_outputFileData));
-			string[] lines = File.ReadAllLines(_inputFileData);		
-			foreach (string s in lines)
+			using (StreamWriter sw = new StreamWriter(File.Create(_outputFileData))) 
 			{
-				string sd=string.Empty;
-				var y = s.Substring(2).Split(',', StringSplitOptions.RemoveEmptyEntries);
-				for (int i =0;i< y.Length; i++)
+				using (StreamReader sr = new StreamReader(_inputFileData)) 
 				{
-					if (y[i] !="?")
+					string[] result = sr.ReadToEnd().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+					foreach (string s in result)
 					{
-						sd += _attributeInformation[i + 1][y[i][0]] + ",";
+						string sd = string.Empty;
+						var y = s.Substring(2).Split(',', StringSplitOptions.RemoveEmptyEntries);
+						for (int i = 0; i < y.Length; i++)
+						{
+							if (y[i] != "?")
+							{
+								sd += _attributeInformation[i + 1][y[i][0]] + ",";
+							}
+						}
+						sw.WriteLine(s[0] + "," + sd.Substring(0, sd.Length - 1));
 					}
 				}
-				sw.WriteLine(s[0] + "," + sd.Substring(0, sd.Length - 1));
 			}
-			sw.Close();
 		}
     }
 }

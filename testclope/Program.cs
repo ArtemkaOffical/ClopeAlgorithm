@@ -1,4 +1,6 @@
-﻿namespace testclope
+﻿using System.Diagnostics;
+
+namespace testclope
 {
     public class Program
     {
@@ -9,8 +11,8 @@
             DataReader dataReader = new DataReader(new MushroomsDataSet("agaricus-lepiota.data", "Normalizeddata.txt"), "Normalizeddata.txt");
             
             ClopeData clopeData = new ClopeData();
-            clopeData.Init(clusters,dataReader.Transactions,2.6);
-            clopeData.Iterate(clusters,dataReader.Transactions,2.6);
+            clopeData.Init(clusters, dataReader.Transactions, 2.6);
+            clopeData.Iterate(clusters, dataReader.Transactions, 2.6);
 
             var newClusters = clusters.Where(x => x.Size != 0);
 

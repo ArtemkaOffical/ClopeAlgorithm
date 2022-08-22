@@ -16,19 +16,22 @@ namespace testclope
         }
         public void Read(string fileDataSetName) 
         {
-            string[] lines = File.ReadAllLines(fileDataSetName);
-            foreach (string s in lines)
+            using (StreamReader sr = new StreamReader(fileDataSetName))
             {
-                List<int> data = new List<int>();
-                foreach (string item in s.Substring(2).Split(',', StringSplitOptions.RemoveEmptyEntries))
+                string[] lines = sr.ReadToEnd().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                foreach (string s in lines)
                 {
-                    int.TryParse(item, out int result);
-                    data.Add(result);
+                    List<int> data = new List<int>();
+                    foreach (string item in s.Substring(2).Split(',', StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        int.TryParse(item, out int result);
+                        data.Add(result);
+                    }
+                    Transactions.Add(new Transaction(data)
+                    {
+                        IsEdible = (s[0] == 'e')
+                    });
                 }
-                Transactions.Add(new Transaction(data) 
-                {
-                    IsEdible = (s[0] == 'e')
-                });
             }
         }
     }
